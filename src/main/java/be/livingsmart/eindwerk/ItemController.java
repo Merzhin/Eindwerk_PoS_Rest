@@ -1,6 +1,6 @@
 package be.livingsmart.eindwerk;
 
-import domain.Item;
+import be.livingsmart.eindwerk.domain.Item;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

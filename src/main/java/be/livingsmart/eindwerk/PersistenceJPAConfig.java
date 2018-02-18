@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EntityScan(basePackages = {"domain"} )
+@EntityScan(basePackages = {"be.livingsmart.eindwerk"} )
 @EnableJpaRepositories(basePackages = "be.livingsmart.eindwerk", considerNestedRepositories = true)
 public class PersistenceJPAConfig {
     @Autowired
@@ -33,7 +33,7 @@ public class PersistenceJPAConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws NamingException {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan(new String[]{"be.livingsmart.eindwerk", "domain"});
+        em.setPackagesToScan(new String[]{"be.livingsmart.eindwerk"});
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
