@@ -1,4 +1,4 @@
-package be.livingsmart.eindwerk.configuration;
+package be.livingsmart.eindwerk;
 
 import java.util.Locale;
 
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.*;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "be.livingsmart.eindwerk")
+@ComponentScan(basePackages = {"be.livingsmart.eindwerk", "be.livingsmart.eindwerk.repository"})
 public class AppConfig extends WebMvcConfigurerAdapter {
 
     /**

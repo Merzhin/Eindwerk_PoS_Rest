@@ -1,6 +1,5 @@
-package be.livingsmart.eindwerk.configuration;
+package be.livingsmart.eindwerk;
 
-import be.livingsmart.eindwerk.repository.ItemJpaRepository;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

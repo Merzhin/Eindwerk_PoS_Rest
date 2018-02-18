@@ -1,4 +1,4 @@
-package be.livingsmart.eindwerk.configuration;
+package be.livingsmart.eindwerk;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
  
