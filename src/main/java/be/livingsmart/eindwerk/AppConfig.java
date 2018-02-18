@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.*;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"be.livingsmart.eindwerk", "be.livingsmart.eindwerk.repository"})
+@ComponentScan(basePackages = {"be.livingsmart.eindwerk", "be.livingsmart.eindwerk.repository", "domain"})
 public class AppConfig extends WebMvcConfigurerAdapter {
 
     /**
