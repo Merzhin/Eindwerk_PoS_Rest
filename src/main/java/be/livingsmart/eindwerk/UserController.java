@@ -4,13 +4,13 @@
  * and open the template in the editor.
  */
 package be.livingsmart.eindwerk;
-import be.livingsmart.eindwerk.UserJpaRepository;
-import be.livingsmart.eindwerk.domain.User;
+import be.livingsmart.eindwerk.domain.UserBean;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import be.livingsmart.eindwerk.UserBeanJpaRepository;
 
 /**
  *
@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     
     @Autowired
-    private UserJpaRepository userRepo;
+    private UserBeanJpaRepository userRepo;
     
     @RequestMapping("/getUsers")
-    public List<User> getUsers(){
+    public List<UserBean> getUsers(){
         return userRepo.findAll();
     }
     
     @RequestMapping("/GetUser")
-    public List<User> getUserByName() 
+    public List<UserBean> getUserByName() 
     {
         
         
@@ -38,15 +38,15 @@ public class UserController {
     @RequestMapping("/user")
     public List<String> getAllUsernames(){
         List<String> result = new ArrayList<>();
-        for(User u : userRepo.findAll()){
+        for(UserBean u : userRepo.findAll()){
             result.add(u.getName());
         }
         return result;
     }
     
     @RequestMapping("/user/addtestuser") // this method is here for testing
-    public User addTestUser(){
-        User u = new User();
+    public UserBean addTestUser(){
+        UserBean u = new UserBean();
         u.setHashedPassword("test");
         u.setName("Tom T");
         userRepo.saveAndFlush(u);
