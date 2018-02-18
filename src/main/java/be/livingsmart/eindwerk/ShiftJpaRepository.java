@@ -1,9 +1,8 @@
 package be.livingsmart.eindwerk;
 
-import domain.Item;
+import domain.Shift;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-public interface ItemJpaRepository extends JpaRepository<Item, Long> {
+public interface ShiftJpaRepository extends JpaRepository<Shift, Long> {
 
 }

@@ -1,9 +1,8 @@
 package be.livingsmart.eindwerk;
 
-import domain.Item;
+import domain.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-public interface ItemJpaRepository extends JpaRepository<Item, Long> {
+public interface StockJpaRepository extends JpaRepository<Stock, Long> {
 
 }

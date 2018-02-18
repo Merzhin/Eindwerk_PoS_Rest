@@ -1,17 +1,18 @@
-package be.livingsmareindwerkon;
-
+package be.livingsmart.eindwerk;
 
 import java.util.Properties;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.jndi.JndiTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
+@EntityScan(basePackages = {"domain"} )
 @EnableJpaRepositories(basePackages = "be.livingsmart.eindwerk", considerNestedRepositories = true)
 public class PersistenceJPAConfig {
     @Autowired
@@ -31,7 +33,7 @@ public class PersistenceJPAConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws NamingException {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan(new String[]{"be.livingsmart.eindwerk"});
+        em.setPackagesToScan(new String[]{"be.livingsmart.eindwerk", "domain"});
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
@@ -40,9 +42,10 @@ public class PersistenceJPAConfig {
     }
 
     @Bean
-    public DataSource dataSource() throws NamingException {
-        return (DataSource) new JndiTemplate().lookup(env.getProperty("jdbc/__default"));
-    }
+    public DataSource dataSource() {
+    JndiDataSourceLookup jndiDataSourceLookup = new JndiDataSourceLookup();
+    return jndiDataSourceLookup.getDataSource("jdbc/__default");
+}
 
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
