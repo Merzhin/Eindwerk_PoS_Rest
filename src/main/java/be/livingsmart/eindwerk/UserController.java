@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import be.livingsmart.eindwerk.UserBeanJpaRepository;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -28,10 +30,8 @@ public class UserController {
     }
     
     @RequestMapping("/GetUser")
-    public List<UserBean> getUserByName() 
+    public UserBean getUserByName() 
     {
-        
-        
         return userRepo.findUserByName("name");
     }
     
@@ -48,9 +48,27 @@ public class UserController {
     public UserBean addTestUser(){
         UserBean u = new UserBean();
         u.setHashedPassword("test");
-        u.setName("Tom T");
+        u.setName("TomT");
         userRepo.saveAndFlush(u);
         return u;
+    }
+    
+    @RequestMapping("/user/addUser")
+    public UserBean addUser(@RequestParam (value="username") String username, @RequestParam (value="password") String password) 
+    {
+        UserBean user = new UserBean();
+        user.setHashedPassword(password);
+        user.setName(username);
+        userRepo.saveAndFlush(user);
+        return user;
+        
+    }
+    
+    @RequestMapping("/user/validateUser")
+    public boolean validateUser(@RequestParam (value="username") String username, @RequestParam (value="password") String password) 
+    {
+        UserBean user = userRepo.findUserByName(username);
+        return user.validatePassword(password);
     }
     
 }
