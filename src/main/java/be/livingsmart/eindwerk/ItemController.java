@@ -6,6 +6,7 @@ import be.livingsmart.eindwerk.domain.Item;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,7 @@ public class ItemController {
         itemRepo.saveAndFlush(item);
         return itemRepo.findAll();
     }
-    
+    /*
     @RequestMapping("/item/additem")
     public Item addItem(@RequestParam (value="name") String name, @RequestParam (value="description") String description, @RequestParam (value="name") String price) 
     {
@@ -38,6 +39,18 @@ public class ItemController {
         item.setName(name);
         item.setDescription(description);
         item.setPrice(new BigDecimal(price));
+        
+        itemRepo.saveAndFlush(item);
+        return item;
+    } */
+    
+    @RequestMapping("/item/additem")
+    public Item addItem(@RequestBody ItemJsonValues values) 
+    {
+        Item item = new Item();
+        item.setName(values.getName());
+        item.setDescription(values.getDescription());
+        item.setPrice(new BigDecimal(values.getPrice()));
         
         itemRepo.saveAndFlush(item);
         return item;

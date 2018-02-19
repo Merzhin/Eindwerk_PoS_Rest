@@ -49,7 +49,7 @@ public class UserController {
         userRepo.saveAndFlush(user);
         return user;
     }
-    
+    /*
     @RequestMapping("/user/validateUser")
     public boolean validateUser(@RequestParam (value="username") String username, @RequestParam (value="password") String password) 
     {
@@ -57,7 +57,7 @@ public class UserController {
         if (user == null) return false;
         return user.validatePassword(password);
     }
-    
+    */
     @RequestMapping("/user/validateUser")
     public boolean validateUser(@RequestBody UserJsonValues values) 
     {
