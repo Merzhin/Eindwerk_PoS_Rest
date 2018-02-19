@@ -54,6 +54,7 @@ public class UserController {
     public boolean validateUser(@RequestParam (value="username") String username, @RequestParam (value="password") String password) 
     {
         UserBean user = userRepo.findUserByName(username);
+        if (user == null) return false;
         return user.validatePassword(password);
     }
     
