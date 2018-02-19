@@ -24,15 +24,11 @@ public class UserController {
     @Autowired
     private UserBeanJpaRepository userRepo;
     
-    @RequestMapping("/getUsers")
-    public List<UserBean> getUsers(){
-        return userRepo.findAll();
-    }
-    
-    @RequestMapping("/GetUser")
-    public UserBean getUserByName() 
+        
+    @RequestMapping("/getUser")
+    public UserBean getUserByName(@RequestParam (value="username") String username) 
     {
-        return userRepo.findUserByName("name");
+        return userRepo.findUserByName(username);
     }
     
     @RequestMapping("/user")
@@ -44,15 +40,6 @@ public class UserController {
         return result;
     }
     
-    @RequestMapping("/user/addtestuser") // this method is here for testing
-    public UserBean addTestUser(){
-        UserBean u = new UserBean();
-        u.setHashedPassword("test");
-        u.setName("TomT");
-        userRepo.saveAndFlush(u);
-        return u;
-    }
-    
     @RequestMapping("/user/addUser")
     public UserBean addUser(@RequestParam (value="username") String username, @RequestParam (value="password") String password) 
     {
@@ -61,7 +48,6 @@ public class UserController {
         user.setName(username);
         userRepo.saveAndFlush(user);
         return user;
-        
     }
     
     @RequestMapping("/user/validateUser")
@@ -69,6 +55,13 @@ public class UserController {
     {
         UserBean user = userRepo.findUserByName(username);
         return user.validatePassword(password);
+    }
+    
+    @RequestMapping("/user/validateUser")
+    public boolean validateUser(@RequestBody UserJsonValues values) 
+    {
+        UserBean user = userRepo.findUserByName(values.getUsername());
+        return user.validatePassword(values.getPassword());
     }
     
 }

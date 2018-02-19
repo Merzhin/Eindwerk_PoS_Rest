@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,6 +29,18 @@ public class ItemController {
         item.setPrice(BigDecimal.ZERO);
         itemRepo.saveAndFlush(item);
         return itemRepo.findAll();
+    }
+    
+    @RequestMapping("/item/additem")
+    public Item addItem(@RequestParam (value="name") String name, @RequestParam (value="description") String description, @RequestParam (value="name") String price) 
+    {
+        Item item = new Item();
+        item.setName(name);
+        item.setDescription(description);
+        item.setPrice(new BigDecimal(price));
+        
+        itemRepo.saveAndFlush(item);
+        return item;
     }
 }
 
