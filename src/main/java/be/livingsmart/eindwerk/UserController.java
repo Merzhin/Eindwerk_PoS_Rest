@@ -10,8 +10,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import be.livingsmart.eindwerk.UserBeanJpaRepository;
+import static org.springframework.http.RequestEntity.method;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -49,7 +50,7 @@ public class UserController {
         userRepo.saveAndFlush(user);
         return user;
     }
-    /*
+    
     @RequestMapping("/user/validateUser")
     public boolean validateUser(@RequestParam (value="username") String username, @RequestParam (value="password") String password) 
     {
@@ -57,9 +58,9 @@ public class UserController {
         if (user == null) return false;
         return user.validatePassword(password);
     }
-    */
-    @RequestMapping("/user/validateUser")
-    public boolean validateUser(@RequestBody UserJsonValues values) 
+
+    @RequestMapping(value = "/user/validateUser2", method = RequestMethod.POST)
+    public boolean validateUser2(@RequestBody UserJsonValues values) 
     {
         UserBean user = userRepo.findUserByName(values.getUsername());
         return user.validatePassword(values.getPassword());
