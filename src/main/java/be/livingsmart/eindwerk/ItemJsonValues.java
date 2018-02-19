@@ -5,12 +5,19 @@
  */
 package be.livingsmart.eindwerk;
 
+
+
 /**
  *
  * @author PC
  */
 public class ItemJsonValues {
-    String name, description;
+    
+
+    String name;
+    
+    String description;
+   
     double price;
 
     public String getName() {

@@ -6,24 +6,27 @@ import be.livingsmart.eindwerk.domain.Item;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/item")
 public class ItemController {
     
     @Autowired
     private ItemJpaRepository itemRepo;
     
-    @RequestMapping("/item")
+    @RequestMapping(method=RequestMethod.GET)
     public List<Item> getItems(){
         return itemRepo.findAll();
     }
     
-    @RequestMapping("/item/addfreebeer") // this method is here for testing
+    @RequestMapping("/addfreebeer") // this method is here for testing
     public List<Item> addFreeBeer(){
         Item item = new Item();
         item.setName("Free beer!");
@@ -45,16 +48,23 @@ public class ItemController {
         return item;
     } */
     
-    @RequestMapping(value="/item/additem", method = RequestMethod.POST)
-    public Item addItem(@RequestBody ItemJsonValues values) 
+    @RequestMapping(value="/additem", method = RequestMethod.POST)
+    public @ResponseBody Item addItem(@RequestBody ItemJsonValues values) 
     {
         Item item = new Item();
         item.setName(values.getName());
         item.setDescription(values.getDescription());
-        item.setPrice(new BigDecimal(values.getPrice()));
-        
+        BigDecimal decimal = new BigDecimal("" + values.getPrice());
+        item.setPrice(decimal);
         itemRepo.saveAndFlush(item);
         return item;
+    }
+    
+    @RequestMapping("/{id}")
+    public @ResponseBody Item getItem(@PathVariable("id") String id)
+    {
+        Long longId = new Long(id);
+        return itemRepo.findOne(longId);
     }
 }
 
