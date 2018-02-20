@@ -54,5 +54,6 @@ public class ItemController {
         Long longId = new Long(id);
         return itemRepo.findOne(longId);
     }
+    
 }
 

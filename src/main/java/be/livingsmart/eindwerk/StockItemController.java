@@ -64,9 +64,10 @@ public class StockItemController {
     public StockItem deleteStockItem(@PathVariable ("id") String id)
     {
         Long longId = new Long(id);
-        StockItem item = stockItemRepo.findOne(longId);
+        StockItem stockItem = stockItemRepo.findOne(longId);
+        itemRepo.delete(stockItem.getItem());
         stockItemRepo.delete(longId);
-        return item;
+        return stockItem;
     }
     
     @RequestMapping(method = RequestMethod.PUT)
