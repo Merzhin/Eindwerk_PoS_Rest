@@ -35,20 +35,8 @@ public class ItemController {
         itemRepo.saveAndFlush(item);
         return itemRepo.findAll();
     }
-    /*
-    @RequestMapping("/item/additem")
-    public Item addItem(@RequestParam (value="name") String name, @RequestParam (value="description") String description, @RequestParam (value="name") String price) 
-    {
-        Item item = new Item();
-        item.setName(name);
-        item.setDescription(description);
-        item.setPrice(new BigDecimal(price));
-        
-        itemRepo.saveAndFlush(item);
-        return item;
-    } */
     
-    @RequestMapping(value="/additem", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody Item addItem(@RequestBody ItemJsonValues values) 
     {
         Item item = new Item();

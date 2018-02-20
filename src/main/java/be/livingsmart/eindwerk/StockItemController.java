@@ -7,6 +7,7 @@ package be.livingsmart.eindwerk;
 
 import be.livingsmart.eindwerk.domain.Item;
 import be.livingsmart.eindwerk.domain.StockItem;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,9 @@ public class StockItemController {
     @Autowired
     private StockItemJpaRepository stockItemRepo; 
     
+    @Autowired 
+    private ItemJpaRepository itemRepo;
+    
     
     @RequestMapping(method = RequestMethod.GET)
     public List<StockItem> getAllStockItems() 
@@ -33,12 +37,44 @@ public class StockItemController {
         return stockItemRepo.findAll();
     }
     
+    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    public StockItem getStockItem(@PathVariable("id") String id) {
+        Long longId = new Long(id);
+        return stockItemRepo.findOne(longId);
+    }
+    
     @RequestMapping(value="/{amount}", method=RequestMethod.POST)
-    public StockItem addStockItem(@RequestBody Item item, @PathVariable("amount") String amount) {
-      
+    public StockItem addStockItem(@RequestBody ItemJsonValues values, @PathVariable("amount") String amount) {
+        
+        int intAmount = Integer.parseInt(amount);
         StockItem stockItem = new StockItem();
-        stockItem.setItem(item);  
-        stockItem.setAmount(Integer.parseInt(amount));
+        
+        Item item = new Item();
+        item.setName(values.getName());
+        item.setDescription(values.description);
+        item.setPrice(new BigDecimal("" + values.getPrice()));
+        item = itemRepo.saveAndFlush(item);
+        
+        stockItem.setItem(item);
+        stockItem.setAmount(intAmount);
         return stockItemRepo.saveAndFlush(stockItem);
     }
+    
+    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+    public StockItem deleteStockItem(@PathVariable ("id") String id)
+    {
+        Long longId = new Long(id);
+        StockItem item = stockItemRepo.findOne(longId);
+        stockItemRepo.delete(longId);
+        return item;
+    }
+    
+    @RequestMapping(method = RequestMethod.PUT)
+    public StockItem updateStockItem(@RequestBody StockItem stockItem)
+    {
+        itemRepo.saveAndFlush(stockItem.getItem());
+        return stockItemRepo.saveAndFlush(stockItem);
+    }
+    
+    
 }
