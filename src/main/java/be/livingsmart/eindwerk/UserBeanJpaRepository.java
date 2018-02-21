@@ -10,5 +10,6 @@ public interface UserBeanJpaRepository extends JpaRepository<UserBean, Long> {
 
     @Query("SELECT u FROM UserBean u WHERE u.name = :name")
     public UserBean findUserByName(@Param("name") String name);
+    
 
 }
