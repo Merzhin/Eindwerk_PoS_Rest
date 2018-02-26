@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface ShiftJpaRepository extends JpaRepository<Shift, Long> {
 
     @Query("SELECT s FROM Shift s WHERE s.endTime = null")
-    public Shift findCurrentShift();
+    public Shift findActiveShift();
 }

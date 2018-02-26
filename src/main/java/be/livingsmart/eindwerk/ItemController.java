@@ -55,5 +55,28 @@ public class ItemController {
         return itemRepo.findOne(longId);
     }
     
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody Item deleteItem(@PathVariable("id") String id)
+    {
+        Long longId = new Long(id);
+        Item item = itemRepo.findOne(longId);
+        if (item == null) throw new IllegalArgumentException("Item with id doesn't exist");
+        itemRepo.delete(item);
+        return item;
+    }
+    
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public @ResponseBody Item updateItem(@PathVariable("id") String id, @RequestBody ItemJsonValues values)
+    {
+        Long longId = new Long(id);
+        Item item = itemRepo.findOne(longId);
+        item.setName(values.getName());
+        item.setDescription(values.getDescription());
+        item.setPrice(new BigDecimal("" + values.getPrice()));
+        item = itemRepo.saveAndFlush(item);
+        return item;
+    }
+            
+    
 }
 

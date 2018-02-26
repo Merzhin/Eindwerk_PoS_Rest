@@ -27,20 +27,13 @@ public class UserController {
     @Autowired
     private UserBeanJpaRepository userRepo;
     
-    
-    @RequestMapping(method = RequestMethod.GET)
-    public List<UserBean> getAllUsers() 
-    {
-        return userRepo.findAll();
-    }
-    
     @RequestMapping(value = "/getUser/{username}", method = RequestMethod.GET)
     public UserBean getUserByName(@PathVariable (value="username") String username) 
     {
         return userRepo.findUserByName(username);
     }
     
-    @RequestMapping(value = "/getUsernames", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public List<String> getAllUsernames(){
         List<String> result = new ArrayList<>();
         for(UserBean u : userRepo.findAll()){

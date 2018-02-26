@@ -50,7 +50,9 @@ public class ShiftController {
     public Shift getShift(@PathVariable ("id") String id) 
     {
         Long longId = new Long(id);
-        return shiftRepo.findOne(longId);
+        Shift shift = shiftRepo.findOne(longId);
+        if (shift == null) throw new IllegalArgumentException("No shift with id exists");
+        return shift;
     }    
     
     @RequestMapping("/testTime")
@@ -68,7 +70,7 @@ public class ShiftController {
     @RequestMapping(value = "/{supervisor}", method = RequestMethod.POST)
     public Shift startShift(@PathVariable ("supervisor") String supervisor) throws Exception
     {
-        Shift currentShift = shiftRepo.findCurrentShift();
+        Shift currentShift = shiftRepo.findActiveShift();
         if ( !(currentShift == null)) throw new Exception("There's already an active shift");
         UserBean user = userRepo.findUserByName(supervisor);
         if (user == null) throw new IllegalArgumentException("Supervisor doesn't exist");
@@ -82,7 +84,7 @@ public class ShiftController {
     @RequestMapping(value = "/endShift", method = RequestMethod.POST)
     public Shift endShift() throws Exception
     {
-        Shift currentShift = shiftRepo.findCurrentShift();
+        Shift currentShift = shiftRepo.findActiveShift();
         if (currentShift == null) throw new Exception("There's no active shift");
         currentShift.setEndTime(new Time(System.currentTimeMillis()));
         return shiftRepo.saveAndFlush(currentShift);
@@ -93,14 +95,33 @@ public class ShiftController {
     {
         Long longId = new Long(id);
         Shift shift = shiftRepo.findOne(longId);
+        if (shift == null) throw new IllegalArgumentException("No shift with id exists");
         return shift.getOrders();
-    }   
+    } 
+    
+    @RequestMapping(value = "/orders", method = RequestMethod.GET)
+    public Map<Long, OrderBean> getOrdersForActiveShift() throws Exception
+    {
+        Shift shift = shiftRepo.findActiveShift();
+        if (shift == null) throw new Exception("There's no active shift");
+        return shift.getOrders();
+    }  
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public Shift deleteShift(@PathVariable ("id") String id)
     {
         Long longId = new Long(id);
         Shift shift = shiftRepo.findOne(longId);
+        if (shift == null) throw new IllegalArgumentException("No shift with id exists");
+        shiftRepo.delete(shift);
+        return shift;
+    }
+    
+    @RequestMapping(method = RequestMethod.DELETE)
+    public Shift deleteActiveShift() throws Exception
+    {
+        Shift shift = shiftRepo.findActiveShift();
+        if (shift == null) throw new Exception("There's no active shift");
         shiftRepo.delete(shift);
         return shift;
     }
@@ -110,6 +131,17 @@ public class ShiftController {
     {
         Long longId = new Long(id);
         Shift shift = shiftRepo.findOne(longId);
+        if (shift == null) throw new IllegalArgumentException("No shift with id exists");
+        UserBean user = userRepo.findUserByName(supervisor);
+        shift.setSupervisor(user);
+        return shiftRepo.saveAndFlush(shift);
+    }
+    
+    @RequestMapping(value = "/{supervisor}", method = RequestMethod.PUT)
+    public Shift updateActiveShift(@PathVariable ("supervisor") String supervisor) throws Exception 
+    {
+        Shift shift = shiftRepo.findActiveShift();
+        if (shift == null) throw new Exception("There's no active shift");
         UserBean user = userRepo.findUserByName(supervisor);
         shift.setSupervisor(user);
         return shiftRepo.saveAndFlush(shift);
