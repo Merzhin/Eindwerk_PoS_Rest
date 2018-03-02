@@ -9,6 +9,7 @@ import be.livingsmart.eindwerk.domain.Item;
 import be.livingsmart.eindwerk.domain.OrderBean;
 import be.livingsmart.eindwerk.domain.OrderedItem;
 import be.livingsmart.eindwerk.domain.Shift;
+import be.livingsmart.eindwerk.domain.ShiftItem;
 import be.livingsmart.eindwerk.domain.StockItem;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -40,6 +41,9 @@ public class OrderController
     
     @Autowired 
     private OrderedItemJpaRepository orderedItemRepo;
+    
+    @Autowired 
+    private ShiftItemJpaRepository shiftItemRepo;
 
     
     @RequestMapping(method = RequestMethod.GET)
@@ -67,12 +71,14 @@ public class OrderController
         Item item = new Item();
         item.setName("Beer");
         item.setDescription("Best beer in the world");
-        item.setPrice(new BigDecimal("" + 3.5));
+//        item.setPrice(new BigDecimal("" + 3.5));
+        item.setPrice(3.5);
         item = itemRepo.saveAndFlush(item);
         
         Item item2 = new Item();
         item2.setName("Beer2");
-        item2.setPrice(new BigDecimal("" + 2));
+//        item2.setPrice(new BigDecimal("" + 2));
+        item2.setPrice(2);
         item2.setDescription("Yeyah");
         item2 = itemRepo.saveAndFlush(item2);
         
@@ -95,16 +101,6 @@ public class OrderController
         
     }
     
-    @RequestMapping("testJsonValues")
-    public Map<Long, Integer> testJsonValues()
-    {
-        Map<Long, Integer> map = new HashMap<Long, Integer>();
-        map.put(new Long(55), 78);
-        map.put(new Long(98), 85);
-        return map;
-        
-    }
-    
     @RequestMapping(value = "/orderedItems")
     public List<OrderedItem> orderedItems()
     {
@@ -115,7 +111,8 @@ public class OrderController
     public OrderBean addOrder(@RequestBody Map<Long, Integer> values)
     {
         OrderBean order = new OrderBean();
-        order.setShift(shiftRepo.findActiveShift());
+        Shift shift = shiftRepo.findActiveShift();
+        order.setShift(shift);
         order.setOrderedItems(new HashMap<Long, OrderedItem>());
         order = orderRepo.saveAndFlush(order);
         
@@ -131,6 +128,24 @@ public class OrderController
             oItem.setOrder(order);
             
             orderedItemRepo.saveAndFlush(oItem);
+            
+            
+            ShiftItem shiftItem = shiftItemRepo.findShiftItemWithItemId(id);
+            
+            if (shiftItem == null ) {
+                shiftItem = new ShiftItem();
+                shiftItem.setItem(item);
+                shiftItem.setAmount(0);
+                shiftItem.setShift(shift);
+            }
+            
+            
+            int amount = shiftItem.getAmount();
+            shiftItem.setAmount(amount + value);
+           
+            shiftItemRepo.saveAndFlush(shiftItem);
+            
+            
         }
         
         return orderRepo.findOne(order.getId());

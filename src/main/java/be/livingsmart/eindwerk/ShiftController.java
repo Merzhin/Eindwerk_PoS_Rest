@@ -7,6 +7,7 @@ package be.livingsmart.eindwerk;
 
 import be.livingsmart.eindwerk.domain.OrderBean;
 import be.livingsmart.eindwerk.domain.Shift;
+import be.livingsmart.eindwerk.domain.ShiftItem;
 import be.livingsmart.eindwerk.domain.UserBean;
 import java.sql.Date;
 import java.sql.Time;
@@ -87,6 +88,8 @@ public class ShiftController {
         Shift currentShift = shiftRepo.findActiveShift();
         if (currentShift == null) throw new Exception("There's no active shift");
         currentShift.setEndTime(new Time(System.currentTimeMillis()));
+//        ExcelWriter writer = new ExcelWriter();
+//        writer.shiftReport(currentShift);
         return shiftRepo.saveAndFlush(currentShift);
     }
     
@@ -146,7 +149,13 @@ public class ShiftController {
         shift.setSupervisor(user);
         return shiftRepo.saveAndFlush(shift);
     }
-         
     
+    @RequestMapping(value = "/shiftItems", method = RequestMethod.GET)
+    public Map<Long, ShiftItem> getShiftItemsForActiveShift() throws Exception
+    {
+        Shift shift = shiftRepo.findActiveShift();
+        if (shift == null) throw new Exception("There's no active shift");
+        return shift.getShiftItems();
+    } 
         
 }

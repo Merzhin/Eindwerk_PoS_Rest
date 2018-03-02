@@ -3,6 +3,9 @@ package be.livingsmart.eindwerk;
 
 import be.livingsmart.eindwerk.ItemJpaRepository;
 import be.livingsmart.eindwerk.domain.Item;
+import be.livingsmart.eindwerk.domain.ShiftItem;
+import java.io.File;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +34,11 @@ public class ItemController {
         Item item = new Item();
         item.setName("Free beer!");
         item.setDescription("The best beer");
-        item.setPrice(BigDecimal.ZERO);
+        item.setPrice(0);
+        
+        
+        
+        
         itemRepo.saveAndFlush(item);
         return itemRepo.findAll();
     }
@@ -42,9 +49,10 @@ public class ItemController {
         Item item = new Item();
         item.setName(values.getName());
         item.setDescription(values.getDescription());
-        BigDecimal decimal = new BigDecimal("" + values.getPrice());
-        item.setPrice(decimal);
-        itemRepo.saveAndFlush(item);
+//        BigDecimal decimal = new BigDecimal("" + values.getPrice());
+        item.setPrice(values.getPrice());
+        item = itemRepo.saveAndFlush(item);
+        
         return item;
     }
     
@@ -72,7 +80,8 @@ public class ItemController {
         Item item = itemRepo.findOne(longId);
         item.setName(values.getName());
         item.setDescription(values.getDescription());
-        item.setPrice(new BigDecimal("" + values.getPrice()));
+//        item.setPrice(new BigDecimal("" + values.getPrice()));
+        item.setPrice(values.getPrice());
         item = itemRepo.saveAndFlush(item);
         return item;
     }

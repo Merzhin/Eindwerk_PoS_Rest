@@ -19,6 +19,18 @@ public class ItemJsonValues {
     String description;
    
     double price;
+    
+    byte[] logo; 
+
+    public byte[] getLogo() {
+        return logo;
+    }
+
+    public void setLogo(byte[] logo) {
+        this.logo = logo;
+    }
+    
+    
 
     public String getName() {
         return name;
