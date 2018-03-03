@@ -70,7 +70,6 @@ public class OrderController
         
         Item item = new Item();
         item.setName("Beer");
-        item.setDescription("Best beer in the world");
 //        item.setPrice(new BigDecimal("" + 3.5));
         item.setPrice(3.5);
         item = itemRepo.saveAndFlush(item);
@@ -79,7 +78,6 @@ public class OrderController
         item2.setName("Beer2");
 //        item2.setPrice(new BigDecimal("" + 2));
         item2.setPrice(2);
-        item2.setDescription("Yeyah");
         item2 = itemRepo.saveAndFlush(item2);
         
         

@@ -51,7 +51,6 @@ public class StockItemController {
         
         Item item = new Item();
         item.setName(values.getName());
-        item.setDescription(values.description);
 //        item.setPrice(new BigDecimal("" + values.getPrice()));
         item.setPrice(values.getPrice());
         item = itemRepo.saveAndFlush(item);
