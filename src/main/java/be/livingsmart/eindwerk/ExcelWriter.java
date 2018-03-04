@@ -36,14 +36,17 @@ public class ExcelWriter {
     public void shiftReport(Shift shift) throws FileNotFoundException, IOException, IOException
     {
         
-        String fileName = "Verslag: " + shift.getCurrentDate() ;//+ "   "  + shift.getStartTime() + ", " + shift.getEndTime();
+        String fileName = "Verslag: " + shift.getCurrentDate() + ".xlsx" ;//+ "   "  + shift.getStartTime() + ", " + shift.getEndTime();
         System.out.println(fileName);
         System.out.println(shift.getStartTime());
         
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Shift");
-        ArrayList<ArrayList<String>> sheetString = new ArrayList<>();
+        ArrayList<ArrayList<String>> sheetString = new ArrayList<ArrayList<String>>();
         
+        for (int i = 0; i <= 5; i++) {
+            sheetString.add(new ArrayList<String>());
+        }
         sheetString.get(0).add("Datum: "); sheetString.get(0).add(""); sheetString.get(0).add("" + shift.getCurrentDate());  
         sheetString.get(1).add("Start shift: "); sheetString.get(1).add(""); sheetString.get(1).add("" + shift.getStartTime()); 
         sheetString.get(2).add("Einde shift: "); sheetString.get(2).add(""); sheetString.get(2).add("" + shift.getEndTime()); 
@@ -51,17 +54,18 @@ public class ExcelWriter {
         sheetString.get(4).add("Product: "); sheetString.get(4).add("Aantal verkocht: "); sheetString.get(4).add("Totale prijs");
         
         int i = 5;
-//        BigDecimal total = new BigDecimal(0);
-//        for (Map.Entry<Long, ShiftItem> entry : shift.getShiftItems().entrySet()) 
-//        {
-//            sheetString.get(i).add(entry.getValue().getItem().getName());
-//            sheetString.get(i).add("" + entry.getValue().getAmount());
-//            BigDecimal productTotal = entry.getValue().getItem().getPrice().multiply(new BigDecimal(entry.getValue().getAmount()));
-//            sheetString.get(i).add("" + productTotal);
-//            total.add(productTotal);
-//            i++;
-//        }
-//        sheetString.get(i).add("Totale prijs: "); sheetString.get(i).add("" + total);
+        double total = 0;
+        for (Map.Entry<Long, ShiftItem> entry : shift.getShiftItems().entrySet()) 
+        {
+            sheetString.add(new ArrayList<String>());
+            sheetString.get(i).add(entry.getValue().getItem().getName());
+            sheetString.get(i).add("" + entry.getValue().getAmount());
+            double productTotal = entry.getValue().getItem().getPrice() * entry.getValue().getAmount();
+            sheetString.get(i).add("" + productTotal);
+            total += productTotal;
+            i++;
+        }
+        sheetString.get(i).add("Totale prijs: "); sheetString.get(i).add("" + total);
         
         int rowNum = 0;
         System.out.println("Creating excel");
@@ -85,7 +89,7 @@ public class ExcelWriter {
             FileOutputStream outputStream = new FileOutputStream(file);
             workbook.write(outputStream);
             workbook.close();
-            sendEmail(fileName);
+            sendEmail(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -95,45 +99,16 @@ public class ExcelWriter {
         System.out.println("Done");
     }
     
-    private void sendEmail(String filename)  {    
+    private void sendEmail(final File file)  {    
         String hdr = "HDRPointOfSale@gmail.com";
-        /*
-        Properties props = new Properties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
-
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.user", hdr);
-        props.put("mail.smtp.password", "PointOfSaleHDR2018");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
         
-        SmtpAuthenticator authenticator = new SmtpAuthenticator();
-        
-
-        try {
-          javax.mail.Message msg = new MimeMessage(Session.getInstance(props, authenticator));
-          msg.setFrom(new InternetAddress( hdr, "From"));
-          InternetAddress to = new InternetAddress("pieterbogemans@hotmail.com", "Mr. User");
-          
-          msg.addRecipient(Message.RecipientType.TO, to);
-          msg.setSubject("Your Example.com account has been activated");
-          msg.setText("This is a test");
-          Transport.send(msg);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        */
         
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         //Using gmail
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
         mailSender.setUsername(hdr);
-        mailSender.setPassword("PointOfSaleHDR2018");
+        mailSender.setPassword("PointOfSale2018");
          
         Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.smtp.starttls.enable", "true");
@@ -145,11 +120,31 @@ public class ExcelWriter {
         
         MimeMessagePreparator preparator = new MimeMessagePreparator() {
             @Override
-            public void prepare(MimeMessage mm) throws Exception {
-                mm.setFrom(new InternetAddress("HDRPointOfSale@gmail.com", "From"));
-                mm.setRecipient(Message.RecipientType.TO, new InternetAddress("pieterbogemans@hotmail.com"));
-                mm.setText("Dear ");
-                mm.setSubject("Your order on Demoapp");
+            public void prepare(MimeMessage message) throws Exception {
+                
+                message.setFrom(new InternetAddress("HDRPointOfSale@gmail.com", "Kassa app"));
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress("pieterbogemans@hotmail.com"));
+                message.setText("Het shift report zit in de bijlage");
+                message.setSubject("Shift report");
+                
+                Multipart multipart = new MimeMultipart();
+
+                // creates body part for the message
+
+
+                // creates body part for the attachment
+                MimeBodyPart attachPart = new MimeBodyPart();
+                attachPart.attachFile(file);
+
+                // code to add attachment...will be revealed later
+
+                // adds parts to the multiparts
+                multipart.addBodyPart(attachPart);
+
+                // sets the multipart as message's content
+                message.setContent(multipart);
+                
+               
             }
         };
         

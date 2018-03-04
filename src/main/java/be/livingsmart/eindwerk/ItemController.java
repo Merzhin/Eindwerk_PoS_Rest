@@ -49,6 +49,7 @@ public class ItemController {
         Item item = new Item();
         item.setName(values.getName());
 //        BigDecimal decimal = new BigDecimal("" + values.getPrice());
+        item.setLogoID(values.getLogoID());
         item.setPrice(values.getPrice());
         item = itemRepo.saveAndFlush(item);
         

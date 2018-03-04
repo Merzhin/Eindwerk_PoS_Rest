@@ -16,21 +16,17 @@ public class ItemJsonValues {
 
     String name;
     
-    String description;
-   
     double price;
     
-    byte[] logo; 
+    String logoID;
 
-    public byte[] getLogo() {
-        return logo;
+    public String getLogoID() {
+        return logoID;
     }
 
-    public void setLogo(byte[] logo) {
-        this.logo = logo;
+    public void setLogoID(String logoID) {
+        this.logoID = logoID;
     }
-    
-    
 
     public String getName() {
         return name;
@@ -40,13 +36,6 @@ public class ItemJsonValues {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public double getPrice() {
         return price;
