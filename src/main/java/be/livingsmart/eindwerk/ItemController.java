@@ -1,13 +1,8 @@
 package be.livingsmart.eindwerk;
 
 
-import be.livingsmart.eindwerk.ItemJpaRepository;
 import be.livingsmart.eindwerk.domain.Item;
-import be.livingsmart.eindwerk.domain.ShiftItem;
-import java.io.File;
-import java.io.FileInputStream;
-import java.math.BigDecimal;
-import java.util.HashMap;
+import be.livingsmart.eindwerk.domain.Logo;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +19,9 @@ public class ItemController {
     
     @Autowired
     private ItemJpaRepository itemRepo;
+    
+    @Autowired
+    private LogoJpaRepository logoRepo;
     
     @RequestMapping(method=RequestMethod.GET)
     public List<Item> getItems(){
@@ -49,12 +46,47 @@ public class ItemController {
         Item item = new Item();
         item.setName(values.getName());
 //        BigDecimal decimal = new BigDecimal("" + values.getPrice());
-        item.setLogoID(values.getLogoID());
+        //item.setLogoID(values.getLogoID());
         item.setPrice(values.getPrice());
+        item.setIsFavorite(false);
         item = itemRepo.saveAndFlush(item);
         
         return item;
     }
+    
+    @RequestMapping(value = "/setFavorites", method = RequestMethod.POST)
+    public String addLogosToItems(@RequestBody Map<Long, Long> values) 
+    {
+        List<Item> items = itemRepo.findAll();
+        for (Item item : items)
+        {
+            item.setIsFavorite(false);
+            item.setLogo(null);
+            itemRepo.saveAndFlush(item);
+        }
+        
+        
+        for (Map.Entry<Long, Long> entry : values.entrySet() )
+        {
+            Item item = itemRepo.findOne(entry.getKey());
+            if (item == null) return "Item with " + entry.getKey() + " doesn't exist";
+            Logo logo = logoRepo.findOne(entry.getValue());
+            if (logo == null) return "Logo with " + entry.getKey() + " doesn't exist";
+            item.setLogo(logo);
+            item.setIsFavorite(true);
+            itemRepo.saveAndFlush(item);
+        }
+        
+        
+        return "Succesfully added logos";
+    }
+    
+    @RequestMapping(value = "/getFavorites", method = RequestMethod.GET)
+    public List<Item> getAllFavorites()
+    {
+        return itemRepo.getAllFavorites(true);
+    }
+    
     
     @RequestMapping("/{id}")
     public @ResponseBody Item getItem(@PathVariable("id") String id)
