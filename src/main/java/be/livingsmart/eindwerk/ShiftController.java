@@ -31,12 +31,6 @@ public class ShiftController {
     @Autowired 
     private ShiftJpaRepository shiftRepo; 
     
-    @Autowired
-    private OrderBeanJpaRepository orderRepo;
-    
-    @Autowired
-    private OrderedItemJpaRepository orderedItemRepo;
-    
     @Autowired 
     private UserBeanJpaRepository userRepo;
     

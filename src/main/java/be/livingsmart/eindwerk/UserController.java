@@ -91,7 +91,9 @@ public class UserController {
     public UserBean deleteUser(@PathVariable ("username") String username)
     {
         UserBean user = userRepo.findUserByName(username);
+        if (user == null) throw new IllegalArgumentException("User doesn't exist");
         userRepo.delete(user);
+        userRepo.flush();
         return user;
     }
     

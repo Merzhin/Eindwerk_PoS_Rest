@@ -92,7 +92,8 @@ public class OrderController
         orderedItem2.setAmount(10);
         orderedItem2.setOrder(order);
         orderedItem2 = orderedItemRepo.saveAndFlush(orderedItem2);
-
+        
+        
         order = orderRepo.findOne(order.getId());
         
         return order;
@@ -106,10 +107,11 @@ public class OrderController
     }
     
     @RequestMapping (method = RequestMethod.POST)
-    public OrderBean addOrder(@RequestBody Map<Long, Integer> values)
+    public OrderBean addOrder(@RequestBody Map<Long, Integer> values) throws Exception
     {
         OrderBean order = new OrderBean();
         Shift shift = shiftRepo.findActiveShift();
+        if (shift == null) throw new Exception ("There's no active shift");
         order.setShift(shift);
         order.setOrderedItems(new HashMap<Long, OrderedItem>());
         order = orderRepo.saveAndFlush(order);

@@ -44,7 +44,7 @@ public class StockItemController {
     }
     
     @RequestMapping(value="/{amount}", method=RequestMethod.POST)
-    public StockItem addStockItem(@RequestBody ItemJsonValues values, @PathVariable("amount") String amount) {
+    public StockItem addStockItem(@RequestBody Item values, @PathVariable("amount") String amount) {
         
         int intAmount = Integer.parseInt(amount);
         StockItem stockItem = new StockItem();

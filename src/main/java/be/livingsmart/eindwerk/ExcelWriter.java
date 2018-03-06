@@ -44,7 +44,7 @@ public class ExcelWriter {
         XSSFSheet sheet = workbook.createSheet("Shift");
         ArrayList<ArrayList<String>> sheetString = new ArrayList<ArrayList<String>>();
         
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i <= 6; i++) {
             sheetString.add(new ArrayList<String>());
         }
         sheetString.get(0).add("Datum: "); sheetString.get(0).add(""); sheetString.get(0).add("" + shift.getCurrentDate());  
@@ -65,7 +65,7 @@ public class ExcelWriter {
             total += productTotal;
             i++;
         }
-        sheetString.get(i).add("Totale prijs: "); sheetString.get(i).add("" + total);
+        sheetString.get(i+1).add("Totale prijs: "); sheetString.get(i).add(""); sheetString.get(i).add("" + total);
         
         int rowNum = 0;
         System.out.println("Creating excel");

@@ -41,14 +41,14 @@ public class ItemController {
     
     
     @RequestMapping(method = RequestMethod.POST)
-    public @ResponseBody Item addItem(@RequestBody ItemJsonValues values) 
+    public @ResponseBody Item addItem(@RequestBody Item values) 
     {
         Item item = new Item();
         item.setName(values.getName());
 //        BigDecimal decimal = new BigDecimal("" + values.getPrice());
         //item.setLogoID(values.getLogoID());
         item.setPrice(values.getPrice());
-        item.setIsFavorite(false);
+        item.setIsFavorite(values.isIsFavorite());
         item = itemRepo.saveAndFlush(item);
         
         return item;
@@ -69,9 +69,9 @@ public class ItemController {
         for (Map.Entry<Long, Long> entry : values.entrySet() )
         {
             Item item = itemRepo.findOne(entry.getKey());
-            if (item == null) return "Item with " + entry.getKey() + " doesn't exist";
+            if (item == null) return "Item with id " + entry.getKey() + " doesn't exist";
             Logo logo = logoRepo.findOne(entry.getValue());
-            if (logo == null) return "Logo with " + entry.getKey() + " doesn't exist";
+            if (logo == null) return "Logo with id " + entry.getKey() + " doesn't exist";
             item.setLogo(logo);
             item.setIsFavorite(true);
             itemRepo.saveAndFlush(item);
@@ -106,7 +106,7 @@ public class ItemController {
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public @ResponseBody Item updateItem(@PathVariable("id") String id, @RequestBody ItemJsonValues values)
+    public @ResponseBody Item updateItem(@PathVariable("id") String id, @RequestBody Item values)
     {
         Long longId = new Long(id);
         Item item = itemRepo.findOne(longId);
