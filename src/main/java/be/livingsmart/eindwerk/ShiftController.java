@@ -151,5 +151,11 @@ public class ShiftController {
         if (shift == null) throw new Exception("There's no active shift");
         return shift.getShiftItems();
     } 
+    
+    @RequestMapping(value = "/activeShift", method = RequestMethod.GET)
+    public Shift getActiveShift()
+    {
+        return shiftRepo.findActiveShift();
+    }
         
 }
