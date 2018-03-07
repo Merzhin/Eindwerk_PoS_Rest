@@ -10,5 +10,6 @@ import org.springframework.data.repository.query.Param;
 public interface ShiftItemJpaRepository extends JpaRepository<ShiftItem, Long> {
 
     @Query("SELECT s FROM ShiftItem s WHERE s.item.id = :id AND s.shift = :shift")
-    public ShiftItem findShiftItemWithItemId(@Param("id") Long id, @Param("shift") Shift shift);
+    public ShiftItem findActiveShiftItemWithItemId(@Param("id") Long id, @Param("shift") Shift shift);
+
 }

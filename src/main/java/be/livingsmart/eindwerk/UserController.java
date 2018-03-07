@@ -55,7 +55,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST )
     public UserBean addUser(@RequestBody UserJsonValues values)
     {
-        if (this.exists(values.getUsername())) throw new IllegalArgumentException("User already exists");  // TODO
+        if (this.exists(values.getUsername())) throw new IllegalArgumentException("User already exists");
         UserBean user = new UserBean();
         user.setName(values.getUsername());
         user.setHashedPassword(values.getPassword());

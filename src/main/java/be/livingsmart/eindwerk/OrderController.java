@@ -130,7 +130,7 @@ public class OrderController
             orderedItemRepo.saveAndFlush(oItem);
             
             
-            ShiftItem shiftItem = shiftItemRepo.findShiftItemWithItemId(id, shift);
+            ShiftItem shiftItem = shiftItemRepo.findActiveShiftItemWithItemId(id, shift);
             
             if (shiftItem == null ) {
                 shiftItem = new ShiftItem();
