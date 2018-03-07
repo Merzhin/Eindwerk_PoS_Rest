@@ -62,7 +62,7 @@ public class PersistenceJPAConfig {
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        properties.setProperty("hibernate.hbm2ddl.auto", "update"); // NOTE: this MUST be set to validate in a production enviroment. See https://stackoverflow.com/questions/221379/hibernate-hbm2ddl-auto-update-in-production
         return properties;
     }
 }
