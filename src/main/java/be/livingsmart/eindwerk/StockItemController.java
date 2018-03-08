@@ -7,7 +7,6 @@ package be.livingsmart.eindwerk;
 
 import be.livingsmart.eindwerk.domain.Item;
 import be.livingsmart.eindwerk.domain.StockItem;
-import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ *  This class is currently not in use
  * @author Pieter
  */
 @RestController
@@ -30,19 +29,20 @@ public class StockItemController {
     @Autowired 
     private ItemJpaRepository itemRepo;
     
-    
+
     @RequestMapping(method = RequestMethod.GET)
     public List<StockItem> getAllStockItems() 
     {
         return stockItemRepo.findAll();
     }
-    
+
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public StockItem getStockItem(@PathVariable("id") String id) {
         Long longId = new Long(id);
         return stockItemRepo.findOne(longId);
     }
     
+
     @RequestMapping(value="/{amount}", method=RequestMethod.POST)
     public StockItem addStockItem(@RequestBody Item values, @PathVariable("amount") String amount) {
         
@@ -60,6 +60,7 @@ public class StockItemController {
         return stockItemRepo.saveAndFlush(stockItem);
     }
     
+
     @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
     public StockItem deleteStockItem(@PathVariable ("id") String id)
     {
@@ -69,7 +70,7 @@ public class StockItemController {
         stockItemRepo.delete(longId);
         return stockItem;
     }
-    
+
     @RequestMapping(method = RequestMethod.PUT)
     public StockItem updateStockItem(@RequestBody StockItem stockItem)
     {

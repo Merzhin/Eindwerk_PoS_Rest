@@ -1,7 +1,6 @@
 package be.livingsmart.eindwerk;
 
 import java.util.Locale;
-import java.util.Properties;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
@@ -12,6 +11,10 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.*;
 
+/**
+ *  Configuration for spring
+ * @author Merzhin
+ */
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"be.livingsmart.eindwerk"})
@@ -19,7 +22,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     /**
      * Configure the ViewResolvers to resolve the correct views.
-     * @param registry
+     * @param registry  {@link ViewResolverRegistry}
      */
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
@@ -32,7 +35,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     /**
      * Configure ResourceHandlers to serve static resources.
-     * @param registry
+     * @param registry {@link ResourceHandlerRegistry}
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

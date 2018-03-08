@@ -10,8 +10,6 @@ import be.livingsmart.eindwerk.domain.OrderBean;
 import be.livingsmart.eindwerk.domain.OrderedItem;
 import be.livingsmart.eindwerk.domain.Shift;
 import be.livingsmart.eindwerk.domain.ShiftItem;
-import be.livingsmart.eindwerk.domain.StockItem;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
- * @author PC
+ *   This class is a {@link RestController} for mostly everything related to {@link OrderBean}s
+ * @author Pieter
  */
 @RestController
 @RequestMapping("/order")
@@ -45,18 +43,31 @@ public class OrderController
     @Autowired 
     private ShiftItemJpaRepository shiftItemRepo;
 
-    
+    /**
+     *  After calling /order, with RequestMethod = GET, this function returns a {@link List} of all {@link OrderBean}s
+     * @return  {@link List} of {@link OrderBean}s  
+     */
     @RequestMapping(method = RequestMethod.GET)
     public List<OrderBean> getOrders() {
         return orderRepo.findAll();
     }
     
+    /**
+     *  After calling /order/{id}, with RequestMethod = GET, this function returns an {@link OrderBean} object
+     * @param id    {@link String}
+     * @return  {@link OrderBean}
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public OrderBean getOrder(@PathVariable ("id") String id) 
     {
         return orderRepo.findOne(new Long(id));
     }
     
+    /**
+     *  After calling /test, with the RequestMethod = POST, this function adds two {@link Item}s to the repository if there is an active {@link Shift} then creates two {@link OrderedItem}s that are connected to the aforementioned {@link Item}s and puts it in a newly created {@link OrderBean}. Then saves this {@link OrderBean} to the JPA repository
+     * @return  The created {@link OrderBean} object
+     * @throws Exception    If there's no active shift
+     */
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public OrderBean addOrder() throws Exception
     {
@@ -100,12 +111,23 @@ public class OrderController
         
     }
     
+    /**
+     *  When /order/orderedItems is called, RequestMethod = GET, returns a {@link List} of all the {@link OrderedItem}s
+     * @return  {@link List} of {@link OrderedItem}s
+     */
     @RequestMapping(value = "/orderedItems")
     public List<OrderedItem> orderedItems()
     {
         return orderedItemRepo.findAll();
     }
     
+    /**
+     After calling /order, RequestMethod = POST, this function will make a new {@link OrderBean} with the values specified in the RequestBody and add it to the repository 
+     * @param values    {@link Map} of {@link Long}s ({@link Item} id) and {@link Integer} (amount of {@link Item}s in this order)  
+     * @return  Created {@link OrderBean}
+     * @throws Exception    When there is no active shift
+     * @throws IllegalArgumentException When there is an {@link Item} id in the {@link Map} while no {@link Item} with that id exists
+     */
     @RequestMapping (method = RequestMethod.POST)
     public OrderBean addOrder(@RequestBody Map<Long, Integer> values) throws Exception
     {
@@ -151,9 +173,18 @@ public class OrderController
         return orderRepo.findOne(order.getId());
     }
     
+    /**
+     *  When /order is called, RequestMethod = DELETE, the {@link OrderBean} with {id} gets deleted
+     * @param id    {@link String} id 
+     * @return The deleted {@link OrderBean}
+     * @throws IllegalArgumentException When no item exists with the given id
+     */
     @RequestMapping (value = "/{id}", method = RequestMethod.DELETE)
     public OrderBean deleteOrder(@PathVariable ("id") String id)
-    {
-        return new OrderBean();
+    {   
+        OrderBean order = orderRepo.findOne(new Long(id));
+        if (order == null) throw new IllegalArgumentException("Item with id " + id + "doesn't exist");
+        orderRepo.delete(order);
+        return order;
     }
 }

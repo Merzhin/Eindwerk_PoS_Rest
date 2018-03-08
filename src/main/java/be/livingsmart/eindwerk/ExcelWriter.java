@@ -27,12 +27,17 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 
 
 /**
- *
- * @author PC
+ *  This class creates excel (.xlsx) files and sends an email to the specified email address
+ * @author Pieter
  */
 public class ExcelWriter {
     
-    
+    /**
+     *  Given a {@link Shift} an excel file gets made. Date, start time, end time and then all the sold products gets listed (amounts + price per product + total prices), followed by a total of all the prices of all the products that got sold. Then it calls a private method that sends this file to a specified (hardcoded) email address.
+     * @param shift This is the {@link Shift} where data gets pulled from. 
+     * @throws FileNotFoundException When the file was not found 
+     * @throws IOException  When a file couldn't be saved
+     */
     public void shiftReport(Shift shift) throws FileNotFoundException, IOException, IOException
     {
         
@@ -51,7 +56,7 @@ public class ExcelWriter {
         sheetString.get(1).add("Start shift: "); sheetString.get(1).add(""); sheetString.get(1).add("" + shift.getStartTime()); 
         sheetString.get(2).add("Einde shift: "); sheetString.get(2).add(""); sheetString.get(2).add("" + shift.getEndTime()); 
         sheetString.get(3).add(""); 
-        sheetString.get(4).add("Product: "); sheetString.get(4).add("Aantal verkocht: "); sheetString.get(4).add("Totale prijs");
+        sheetString.get(4).add("Product: "); sheetString.get(4).add("Aantal verkocht: "); sheetString.get(4).add("Prijs per product"); sheetString.get(4).add("Totale prijs");
         
         int i = 5;
         double total = 0;
@@ -60,12 +65,13 @@ public class ExcelWriter {
             sheetString.add(new ArrayList<String>());
             sheetString.get(i).add(entry.getValue().getItem().getName());
             sheetString.get(i).add("" + entry.getValue().getAmount());
+            sheetString.get(i).add("" + entry.getValue().getItem().getPrice()); 
             double productTotal = entry.getValue().getItem().getPrice() * entry.getValue().getAmount();
             sheetString.get(i).add("" + productTotal);
             total += productTotal;
             i++;
         }
-        sheetString.get(i+1).add("Totale prijs: "); sheetString.get(i).add(""); sheetString.get(i).add("" + total);
+        sheetString.get(i+1).add("Totale prijs: "); sheetString.get(i+1).add(""); sheetString.get(i+1).add(""); sheetString.get(i+1).add("" + total);
         
         int rowNum = 0;
         System.out.println("Creating excel");
@@ -122,8 +128,10 @@ public class ExcelWriter {
             @Override
             public void prepare(MimeMessage message) throws Exception {
                 
+                String email = "pieterbogemans@hotmail.com";
+                
                 message.setFrom(new InternetAddress("HDRPointOfSale@gmail.com", "Kassa app"));
-                message.setRecipient(Message.RecipientType.TO, new InternetAddress("pieterbogemans@hotmail.com"));
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
                 message.setText("Het shift report zit in de bijlage");
                 message.setSubject("Shift report");
                 

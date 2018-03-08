@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ *  This class is a {@link RestController} for everything related to {@link Logo}s
  * @author Pieter
  */
 
@@ -26,18 +26,32 @@ public class LogoController
     @Autowired 
     private LogoJpaRepository logoRepo;
     
+    /**
+     *  After calling /logo, with RequestMethod = GET, this function returns a {@link List} of all {@link Logo}s
+     * @return  {@link List} of all {@link Logo}s
+     */
     @RequestMapping(method = RequestMethod.GET)
     public List<Logo> getAllLogos() 
     {
         return logoRepo.findAll();
     }
     
+    /**
+     *  After calling /logo, with RequestMethod = POST, this function adds a {@link Logo} to the JpaRepository
+     * @param logo  {@link RequestBody} {@link Logo}: Variables: "name" ({@link String}), "url" ({@link String})
+     * @return  The added {@link Logo}
+     */
     @RequestMapping(method = RequestMethod.POST)
     public Logo addLogo(@RequestBody Logo logo)
     {
         return logoRepo.saveAndFlush(logo);
     }
     
+    /**
+     *  After calling /logo/{id}, with RequestMethod = DELETE; this function deletes the {@link Logo} whose {id} is the PathVariable from the JpaRepository
+     * @param id    {@link Long}
+     * @return  The deleted {@link Logo}
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public Logo deleteLogo(@PathVariable ("id") String id)
     {

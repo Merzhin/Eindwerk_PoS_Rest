@@ -2,6 +2,10 @@ package be.livingsmart.eindwerk;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
  
+/**
+ *  Initializes the application
+ * @author Merzhin
+ */
 public class AppInitializer 
         extends AbstractAnnotationConfigDispatcherServletInitializer {
  

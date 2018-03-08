@@ -8,6 +8,7 @@ package be.livingsmart.eindwerk;
 import be.livingsmart.eindwerk.domain.OrderBean;
 import be.livingsmart.eindwerk.domain.Shift;
 import be.livingsmart.eindwerk.domain.ShiftItem;
+import be.livingsmart.eindwerk.domain.Item;
 import be.livingsmart.eindwerk.domain.UserBean;
 import java.sql.Date;
 import java.sql.Time;
@@ -15,14 +16,13 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
- * @author PC
+ *  This class is a {@link RestController} for mostly everything related to {@link Shift}s
+ * @author Pieter
  */
 @RestController
 @RequestMapping("/shift")
@@ -34,13 +34,21 @@ public class ShiftController {
     @Autowired 
     private UserBeanJpaRepository userRepo;
     
-    
+    /**
+     *  After calling /shift, @return  with RequestMethod = GET, this function returns a {@link List} of all {@link Shift}s
+     *  @return  {@link List} of {@link Item}s  
+     */
     @RequestMapping(method = RequestMethod.GET)
     public List<Shift> getAllShifts() 
     {
         return shiftRepo.findAll();
     }
     
+    /**
+     *  After calling /shift/{id}, RequestMethod = GET, the function returns the {@link Shift} with the given {id} 
+     * @param id {@link String}
+     * @return  {@link Shift}
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Shift getShift(@PathVariable ("id") String id) 
     {
@@ -50,18 +58,13 @@ public class ShiftController {
         return shift;
     }    
     
-    @RequestMapping("/testTime")
-    public Time test() {
-        
-        return new Time(System.currentTimeMillis());
-    }
-    
-    @RequestMapping("/testDate")
-    public Date test2() {
-        
-        return new Date(System.currentTimeMillis());
-    }
-    
+    /**
+     *  After calling /shift/{supervisor}, RequestMethod = POST, the function starts a new {@link Shift}, sets the current time, date and the {supervisor} ({@link UserBean}) and saves it to the JPA repository
+     * @param supervisor    {@link String} Supervisor must be a name that exists in the {@link UserBeanJpaRepository}
+     * @return  The started {@link Shift}
+     * @throws Exception    When there's already an active {@link Shift}
+     * @throws IllegalArgumentException When the supervisor doesn't exist in the {@link UserBeanJpaRepository}
+     */
     @RequestMapping(value = "/{supervisor}", method = RequestMethod.POST)
     public Shift startShift(@PathVariable ("supervisor") String supervisor) throws Exception
     {
@@ -76,6 +79,11 @@ public class ShiftController {
         return shiftRepo.saveAndFlush(shift);
     }
     
+    /**
+     *  After calling /shift/endShift, RequestMethod = POST, the function ends the active {@link Shift}, then writes a new Excel file with {@link ExcelWriter} and sends an email to a hardcoded email address
+     * @return the {@link Shift} that has ended
+     * @throws Exception    When there currently isn't an active {@link Shift}
+     */
     @RequestMapping(value = "/endShift", method = RequestMethod.POST)
     public Shift endShift() throws Exception
     {
@@ -87,6 +95,11 @@ public class ShiftController {
         return shiftRepo.saveAndFlush(currentShift);
     }
     
+    /**
+     *  After calling /shift/{id}/orders, RequestMethod = GET, this function will return a {@link Map} of all {@link OrderBean}s for the {@link Shift} with {id}
+     * @param id    {@link String}
+     * @return  {@link Map} of {@link Long}s (orderId) and {@link OrderBean}
+     */
     @RequestMapping(value = "/{id}/orders", method = RequestMethod.GET)
     public Map<Long, OrderBean> getOrdersForShift(@PathVariable ("id") String id)
     {
@@ -96,6 +109,11 @@ public class ShiftController {
         return shift.getOrders();
     } 
     
+    /**
+     *  After calling /shift/orders, RequestMethod = GET, this function will return all {@link OrderBean}s for the active {@link Shift}
+     * @return  {@link Map} of {@link Long}s (orderId) and {@link OrderBean}
+     * @throws Exception    When there currently isn't an active {@link Shift}
+     */
     @RequestMapping(value = "/orders", method = RequestMethod.GET)
     public Map<Long, OrderBean> getOrdersForActiveShift() throws Exception
     {
@@ -104,6 +122,12 @@ public class ShiftController {
         return shift.getOrders();
     }  
     
+    /**
+     *  After calling /shift/{id}, RequestMethod = DELETE, this function will DELETE a {@link Shift} from the JPA repository with {id}
+     * @param id   {@link String}
+     * @return  {@link Shift}
+     * @throws IllegalArgumentException When no shift with id exists
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public Shift deleteShift(@PathVariable ("id") String id)
     {
@@ -114,6 +138,11 @@ public class ShiftController {
         return shift;
     }
     
+    /**
+     *  After calling /shift/{id}, RequestMethod = DELETE, this function will DELETE the active {@link Shift} from the JPA repository
+     * @return  The deleted {@link Shift}
+     * @throws Exception    When there's no active {@link Shift}
+     */
     @RequestMapping(method = RequestMethod.DELETE)
     public Shift deleteActiveShift() throws Exception
     {
@@ -123,27 +152,11 @@ public class ShiftController {
         return shift;
     }
     
-    @RequestMapping(value = "/{id}/{supervisor}", method = RequestMethod.PUT)
-    public Shift updateShift(@PathVariable ("id") String id, @PathVariable ("supervisor") String supervisor) 
-    {
-        Long longId = new Long(id);
-        Shift shift = shiftRepo.findOne(longId);
-        if (shift == null) throw new IllegalArgumentException("No shift with id exists");
-        UserBean user = userRepo.findUserByName(supervisor);
-        shift.setSupervisor(user);
-        return shiftRepo.saveAndFlush(shift);
-    }
-    
-    @RequestMapping(value = "/{supervisor}", method = RequestMethod.PUT)
-    public Shift updateActiveShift(@PathVariable ("supervisor") String supervisor) throws Exception 
-    {
-        Shift shift = shiftRepo.findActiveShift();
-        if (shift == null) throw new Exception("There's no active shift");
-        UserBean user = userRepo.findUserByName(supervisor);
-        shift.setSupervisor(user);
-        return shiftRepo.saveAndFlush(shift);
-    }
-    
+    /**
+     *  After calling /shift/{id}, RequestMethod = GET, this function will return the {@link ShiftItem} for the active {@link Shift}
+     * @return  {@link Map} of {@link Long} (ids) and {@link ShiftItem}s
+     * @throws Exception When there's no active {@link Shift}
+     */
     @RequestMapping(value = "/shiftItems", method = RequestMethod.GET)
     public Map<Long, ShiftItem> getShiftItemsForActiveShift() throws Exception
     {
@@ -152,6 +165,10 @@ public class ShiftController {
         return shift.getShiftItems();
     } 
     
+    /**
+     *  After calling /shift/activeShift, RequestMethod = GET, this function will return the active {@link Shift}
+     * @return  Active {@link Shift}
+     */
     @RequestMapping(value = "/activeShift", method = RequestMethod.GET)
     public Shift getActiveShift()
     {

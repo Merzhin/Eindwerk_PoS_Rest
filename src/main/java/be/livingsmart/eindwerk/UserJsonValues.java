@@ -6,8 +6,8 @@
 package be.livingsmart.eindwerk;
 
 /**
- *
- * @author PC
+ *  Temporary class for POSTing RequestBodies
+ * @author Pieter
  */
 public class UserJsonValues {
     private String username, password;
@@ -23,6 +23,7 @@ public class UserJsonValues {
     public String getPassword() {
         return password;
     }
+
 
     public void setPassword(String password) {
         this.password = password;

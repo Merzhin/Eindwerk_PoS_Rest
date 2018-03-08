@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *  This class is a {@link RestController} for mostly everything related to {@link Item}s
+ * @author Pieter
+ */
 @RestController
 @RequestMapping("/item")
 public class ItemController {
@@ -23,11 +27,19 @@ public class ItemController {
     @Autowired
     private LogoJpaRepository logoRepo;
     
+    /**
+     *  After calling /item, with RequestMethod = GET, this function returns a {@link List} of all {@link Item}s
+     * @return  {@link List} of {@link Item}s  
+     */
     @RequestMapping(method=RequestMethod.GET)
     public List<Item> getItems(){
         return itemRepo.findAll();
     }
     
+    /**
+     *  After calling the test method /addfreebeer, a new {@link Item} will be added and saved to the JpaRepository
+     * @return  {@link List} of all {@link Item}s
+     */
     @RequestMapping("/addfreebeer") // this method is here for testing
     public List<Item> addFreeBeer(){
         Item item = new Item();
@@ -39,7 +51,11 @@ public class ItemController {
         return itemRepo.findAll();
     }
     
-    
+    /**
+     *  After calling /item, RequestMethod = POST, this function will make a new {@link Item} with the values specified in the RequestBody and add it to the repository 
+     * @param values    {@link Item}: Parameters: "name" ({@link String}), "price" ({@link Double}), "isFavorite" ({@link Boolean}).   
+     * @return The added {@link Item} 
+     */
     @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody Item addItem(@RequestBody Item values) 
     {
@@ -54,6 +70,11 @@ public class ItemController {
         return item;
     }
     
+    /**
+     *  After calling /item/setFavorites, RequestMethod = POST, this function will set the isFavorite {@link Boolean} of all {@link Item}s to false, then it will add all given {@link Logo}s to the {@link Item}s whose id correspond with the logoIds 
+     * @param values    {@link Map} of ItemIds ({@link Long}) and LogoIds ({@link Long})    
+     * @return  String whether or not the favorites have been set correctly
+     */
     @RequestMapping(value = "/setFavorites", method = RequestMethod.POST)
     public String addLogosToItems(@RequestBody Map<Long, Long> values) 
     {
@@ -61,7 +82,6 @@ public class ItemController {
         for (Item item : items)
         {
             item.setIsFavorite(false);
-            item.setLogo(null);
             itemRepo.saveAndFlush(item);
         }
         
@@ -81,13 +101,21 @@ public class ItemController {
         return "Succesfully added logos";
     }
     
+    /**
+     *  After calling /item/getFavorites, RequestMethod = GET. Returns all {@link Item}s whose isFavorite {@link Boolean} is set to true  
+     * @return  {@link List} of {@link Item}s  
+     */
     @RequestMapping(value = "/getFavorites", method = RequestMethod.GET)
     public List<Item> getAllFavorites()
     {
         return itemRepo.getAllFavorites(true);
     }
     
-    
+    /**
+     *  After calling /item/{id}, RequestMethod = GET. Returns the {@link Item} with {id} 
+     * @param id    {@link Long} itemId
+     * @return  {@link Item} 
+     */
     @RequestMapping("/{id}")
     public @ResponseBody Item getItem(@PathVariable("id") String id)
     {
@@ -95,6 +123,11 @@ public class ItemController {
         return itemRepo.findOne(longId);
     }
     
+    /**
+     *  After calling /item/{id}, RequestMethod = DELETE. Deletes and returns the {@link Item} with {id} 
+     * @param id    {@link Long}
+     * @return  {@link Item}
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public @ResponseBody Item deleteItem(@PathVariable("id") String id)
     {
@@ -105,6 +138,12 @@ public class ItemController {
         return item;
     }
     
+    /**
+     *  After calling /item/{id}, RequestMethod = PUT. Updates and returns the {@link Item} with {id} 
+     * @param id   {@link Long} itemId 
+     * @param values    {@link Item}: Parameters: "name" ({@link String}), "price" ({@link Double}), "isFavorite" ({@link Boolean}). 
+     * @return  The updated {@link Item}
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public @ResponseBody Item updateItem(@PathVariable("id") String id, @RequestBody Item values)
     {

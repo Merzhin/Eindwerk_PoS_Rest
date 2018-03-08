@@ -5,14 +5,11 @@
  */
 package be.livingsmart.eindwerk;
 
-import java.util.List;
-import be.livingsmart.eindwerk.domain.StockItem;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ *  This class is currently not in use
  * @author Pieter
  */
 @RestController
