@@ -83,7 +83,7 @@ public class ShiftController {
         if (currentShift == null) throw new Exception("There's no active shift");
         currentShift.setEndTime(new Time(System.currentTimeMillis()));
         ExcelWriter writer = new ExcelWriter();
-        //writer.shiftReport(currentShift);
+        writer.shiftReport(currentShift);
         return shiftRepo.saveAndFlush(currentShift);
     }
     
