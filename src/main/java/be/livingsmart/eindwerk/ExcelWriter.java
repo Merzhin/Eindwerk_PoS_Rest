@@ -128,7 +128,7 @@ public class ExcelWriter {
             @Override
             public void prepare(MimeMessage message) throws Exception {
                 
-                String email = "pieterbogemans@hotmail.com";
+                String email = "HDRPointOfSale@gmail.com";
                 
                 message.setFrom(new InternetAddress("HDRPointOfSale@gmail.com", "Kassa app"));
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
