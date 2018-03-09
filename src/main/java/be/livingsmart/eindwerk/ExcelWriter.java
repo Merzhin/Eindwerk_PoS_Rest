@@ -49,16 +49,17 @@ public class ExcelWriter {
         XSSFSheet sheet = workbook.createSheet("Shift");
         ArrayList<ArrayList<String>> sheetString = new ArrayList<ArrayList<String>>();
         
-        for (int i = 0; i <= 6; i++) {
+        for (int i = 0; i <= 7; i++) {
             sheetString.add(new ArrayList<String>());
         }
         sheetString.get(0).add("Datum: "); sheetString.get(0).add(""); sheetString.get(0).add("" + shift.getCurrentDate());  
         sheetString.get(1).add("Start shift: "); sheetString.get(1).add(""); sheetString.get(1).add("" + shift.getStartTime()); 
         sheetString.get(2).add("Einde shift: "); sheetString.get(2).add(""); sheetString.get(2).add("" + shift.getEndTime()); 
-        sheetString.get(3).add(""); 
-        sheetString.get(4).add("Product: "); sheetString.get(4).add("Aantal verkocht: "); sheetString.get(4).add("Prijs per product"); sheetString.get(4).add("Totale prijs");
+        sheetString.get(3).add("Supervisor: "); sheetString.get(3).add(""); sheetString.get(3).add("" + shift.getSupervisor());
+        sheetString.get(4).add(""); 
+        sheetString.get(5).add("Product: "); sheetString.get(5).add("Aantal verkocht: "); sheetString.get(5).add("Prijs per product"); sheetString.get(5).add("Totale prijs");
         
-        int i = 5;
+        int i = 6;
         double total = 0;
         for (Map.Entry<Long, ShiftItem> entry : shift.getShiftItems().entrySet()) 
         {
