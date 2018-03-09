@@ -55,7 +55,7 @@ public class ExcelWriter {
         sheetString.get(0).add("Datum: "); sheetString.get(0).add(""); sheetString.get(0).add("" + shift.getCurrentDate());  
         sheetString.get(1).add("Start shift: "); sheetString.get(1).add(""); sheetString.get(1).add("" + shift.getStartTime()); 
         sheetString.get(2).add("Einde shift: "); sheetString.get(2).add(""); sheetString.get(2).add("" + shift.getEndTime()); 
-        sheetString.get(3).add("Supervisor: "); sheetString.get(3).add(""); sheetString.get(3).add("" + shift.getSupervisor());
+        sheetString.get(3).add("Supervisor: "); sheetString.get(3).add(""); sheetString.get(3).add("" + shift.getSupervisor().getName());
         sheetString.get(4).add(""); 
         sheetString.get(5).add("Product: "); sheetString.get(5).add("Aantal verkocht: "); sheetString.get(5).add("Prijs per product"); sheetString.get(5).add("Totale prijs");
         
