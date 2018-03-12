@@ -5,11 +5,10 @@
  */
 package be.livingsmart.eindwerk;
 
-import be.livingsmart.eindwerk.domain.OrderBean;
-import be.livingsmart.eindwerk.domain.Shift;
-import be.livingsmart.eindwerk.domain.ShiftItem;
-import be.livingsmart.eindwerk.domain.Item;
-import be.livingsmart.eindwerk.domain.UserBean;
+import be.livingsmart.hdr.OrderBean;
+import be.livingsmart.hdr.Shift;
+import be.livingsmart.hdr.ShiftItem;
+import be.livingsmart.hdr.UserBean;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.List;

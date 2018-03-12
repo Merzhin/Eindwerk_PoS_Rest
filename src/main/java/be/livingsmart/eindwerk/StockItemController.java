@@ -5,8 +5,8 @@
  */
 package be.livingsmart.eindwerk;
 
-import be.livingsmart.eindwerk.domain.Item;
-import be.livingsmart.eindwerk.domain.StockItem;
+import be.livingsmart.hdr.Item;
+import be.livingsmart.hdr.StockItem;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,7 +1,7 @@
 package be.livingsmart.eindwerk;
 
 
-import be.livingsmart.eindwerk.domain.Shift;
+import be.livingsmart.hdr.Shift;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

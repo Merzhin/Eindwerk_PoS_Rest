@@ -5,7 +5,7 @@
  */
 package be.livingsmart.eindwerk;
 
-import be.livingsmart.eindwerk.domain.Logo;
+import be.livingsmart.hdr.Logo;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -5,7 +5,7 @@
  */
 package be.livingsmart.eindwerk;
 
-import be.livingsmart.eindwerk.domain.Logo;
+import be.livingsmart.hdr.Logo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

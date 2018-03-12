@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package be.livingsmart.eindwerk;
-import be.livingsmart.eindwerk.domain.UserBean;
+import be.livingsmart.hdr.UserBean;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

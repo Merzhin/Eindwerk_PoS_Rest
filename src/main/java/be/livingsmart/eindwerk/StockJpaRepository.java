@@ -1,6 +1,6 @@
 package be.livingsmart.eindwerk;
 
-import be.livingsmart.eindwerk.domain.Stock;
+import be.livingsmart.hdr.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

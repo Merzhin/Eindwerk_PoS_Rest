@@ -1,8 +1,7 @@
 package be.livingsmart.eindwerk;
 
-
-import be.livingsmart.eindwerk.domain.Item;
-import be.livingsmart.eindwerk.domain.Logo;
+import be.livingsmart.hdr.Item;
+import be.livingsmart.hdr.Logo;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;

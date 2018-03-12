@@ -5,9 +5,9 @@
  */
 package be.livingsmart.eindwerk;
 
-import be.livingsmart.eindwerk.domain.OrderBean;
-import be.livingsmart.eindwerk.domain.Shift;
-import be.livingsmart.eindwerk.domain.ShiftItem;
+
+import be.livingsmart.hdr.Shift;
+import be.livingsmart.hdr.ShiftItem;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

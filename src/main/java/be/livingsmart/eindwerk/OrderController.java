@@ -5,11 +5,11 @@
  */
 package be.livingsmart.eindwerk;
 
-import be.livingsmart.eindwerk.domain.Item;
-import be.livingsmart.eindwerk.domain.OrderBean;
-import be.livingsmart.eindwerk.domain.OrderedItem;
-import be.livingsmart.eindwerk.domain.Shift;
-import be.livingsmart.eindwerk.domain.ShiftItem;
+import be.livingsmart.hdr.Item;
+import be.livingsmart.hdr.OrderBean;
+import be.livingsmart.hdr.OrderedItem;
+import be.livingsmart.hdr.Shift;
+import be.livingsmart.hdr.ShiftItem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package be.livingsmart.eindwerk;
 
-import be.livingsmart.eindwerk.domain.OrderBean;
+import be.livingsmart.hdr.OrderBean;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
